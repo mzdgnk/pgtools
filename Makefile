@@ -1,5 +1,5 @@
 NAME=mzdgnk/pgdemo
-VERSION=latest
+VERSION=stable
 
 build:
 	docker build -t ${NAME}:${VERSION} .
