@@ -30,6 +30,7 @@ class MainCmd(object):
     def insert(self, *args):
         for name in args:
             self.tool.insert(name)
+        self.list()
 
     def list(self):
         print(tabulate(
@@ -43,6 +44,7 @@ class MainCmd(object):
             self.tool.delete_all()
         else:
             self.tool.delete(name=name)
+        self.list()
 
 def main():
     fire.Fire(MainCmd)
