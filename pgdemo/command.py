@@ -25,10 +25,10 @@ class MainCmd(object):
             'password': self.password
         }
 
-    def create(self, retry=0):
+    def create(self, tries=1):
         retry_call(
             self.tool.create_table,
-            tries=retry,
+            tries=tries,
             delay=3,
             max_delay=3
         )
