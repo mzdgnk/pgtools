@@ -4,6 +4,12 @@ import fire
 from tabulate import tabulate
 import os
 from retry.api import retry_call
+import logging
+
+
+logger = logging.getLogger("pgdemo")
+handler = logging.StreamHandler()
+logger.addHandler(handler)
 
 
 class MainCmd(object):
@@ -30,7 +36,8 @@ class MainCmd(object):
             self.tool.create_table,
             tries=tries,
             delay=3,
-            max_delay=3
+            max_delay=3,
+            logger=logger
         )
 
     def insert(self, *args):
