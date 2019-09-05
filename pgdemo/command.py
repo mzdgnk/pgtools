@@ -3,6 +3,7 @@ from pgdemo.utils import PostgresTools
 import fire
 from tabulate import tabulate
 import os
+from retry.api import retry_call
 
 
 class MainCmd(object):
@@ -24,8 +25,13 @@ class MainCmd(object):
             'password': self.password
         }
 
-    def create(self):
-        self.tool.create_table()
+    def create(self, retry=0):
+        retry_call(
+            self.tool.create_table,
+            tries=retry,
+            delay=3,
+            max_delay=3
+        )
 
     def insert(self, *args):
         for name in args:
