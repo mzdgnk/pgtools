@@ -16,10 +16,16 @@ class PostgresTools():
         }
         with psycopg2.connect(**self.pg_info) as conn:
             util = PostgresUtils(conn)
-            util.create_table(
-                name=self.table,
-                columns=columns
-            )
+            if not 'users' in  util.tables().relname.to_list():
+                util.create_table(
+                    name=self.table,
+                    columns=columns
+                )
+
+    def tables(self):
+        with psycopg2.connect(**self.pg_info) as conn:
+            util = PostgresUtils(conn)
+            return util.tables()
 
     def insert(self, name):
         with psycopg2.connect(**self.pg_info) as conn:
@@ -60,6 +66,14 @@ class PostgresUtils():
         with self.conn.cursor() as cur:
             cur.execute(sql)
         self.conn.commit()
+
+    def tables(self):
+        sql = 'SELECT * FROM pg_stat_user_tables'
+        return pd.read_sql(
+           sql=sql,
+           con=self.conn,
+           index_col='relid'
+       )
 
     def insert(self, table, data):
         sql = 'insert into {table} ({keys}) values ({values})'.format(
